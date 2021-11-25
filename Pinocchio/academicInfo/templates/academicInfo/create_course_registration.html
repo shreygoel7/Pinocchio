@@ -1,0 +1,31 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="row gutters-sm">
+  <div class="col-md-3 mb-4">
+    <div class="card">
+      <div class="card-body">
+        <div class="d-flex flex-column align-items-center text-center">
+          <img src="{% static "course_image.jpg" %}" alt="Admin" class="rounded-circle" width="150" height="150">
+          <div class="mt-3">
+            <h4>Add Course Registration</h4>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-8">
+    <div class="card mb-3">
+      <div class="card-body">
+        <form method="POST">
+          {% csrf_token %}
+          {% include 'bs4_form.html' with form=create_course_registration_form %}
+          <input name="Create" type="submit" class="btn btn-primary" value="Create">
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

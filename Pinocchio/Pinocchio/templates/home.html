@@ -1,0 +1,16 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block content %}
+<div class="newdiv">
+    <div class="text">
+      <h2>About Pinocchio</h2>
+      <h5>Pinocchio is a website for students to register for their college courses.
+      The process is simple. Your college admin will create all the courses and then create the registration form.
+      The registration starts on a particular date and time and stays live till the registration end time. You can go ahead and signup yourself
+      to register for the courses. To see upcoming or live registrations click Registrations on the top.</h5>
+    </div>
+    <img class="crop same" id="image" src="{% static "pinocchio_image.jpeg" %}" alt="My image">
+</div>
+
+{% endblock %}

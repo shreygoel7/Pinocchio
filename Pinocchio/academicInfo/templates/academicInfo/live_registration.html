@@ -1,0 +1,69 @@
+{% extends 'index.html' %}
+
+{% block content %}
+  {% if error %}
+    <div class="alert alert-danger alert-dismissible">
+      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+      <strong>Error!</strong> {{ error }}
+    </div>
+  {% endif %}
+  <div class="row gutters-sm">
+    <div class="col-md-12">
+      <div class="card mb-3">
+        <div class="card-body">
+          {% if not course_registration %}
+          <div class="row">
+            <div class="col-sm-8">
+              <h5 class="mb-0">No Courses in this registration. Please contact your college admin.</h5>
+            </div>
+          </div>
+          <hr>
+          {% else %}
+            <div class="row">
+              <div class="col-sm-8">
+                <h4 class="mb-0">Courses</h4>
+              </div>
+            </div>
+            <hr>
+            {% for course_registration in course_registration.all %}
+              <div class="row">
+                <div class="col-sm-4">
+                  <h6 class="mb-0">{{ course_registration.course }}</h6>
+                </div>
+                <div class="col-sm-2 text-secondary">
+                  <p>{{ course_registration.faculty }}</p>
+                </div>
+                <div class="col-sm-2 text-secondary">
+                  <p>Semester: {{ course_registration.semester }}</p>
+                </div>
+                <div class="col-sm-2 text-secondary">
+                  <p>Remaining Seats: {{ course_registration.remaining_seats }}</p>
+                </div>
+                {% if not course_registration in student_courses %}
+                <div class="col-sm-1">
+                  <form method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="course_registration_id" value="{{ course_registration.id }}">
+                    <input type="submit" class="btn btn-info" name="Register" value="Register">
+                  </form>
+                </div>
+                {% else %}
+                  <div class="col-sm-1">
+                    <form method="POST">
+                      {% csrf_token %}
+                      <input type="hidden" name="course_registration_id" value="{{ course_registration.id }}">
+                      <input type="submit" class="btn btn-danger" name="UnRegister" value="UnRegister">
+                    </form>
+                  </div>
+                {% endif %}
+              </div>
+              <hr>
+            {% endfor %}
+          {% endif %}
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
