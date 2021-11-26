@@ -7,6 +7,45 @@
       <strong>Error!</strong> {{ error }}
     </div>
   {% endif %}
+
+  <div class="row gutters-sm">
+    <div class="col-md-12">
+      <div class="card mb-3">
+        <div class="card-body">
+          {% if not present_registrations %}
+          <div class="row">
+            <div class="col-sm-8">
+              <h5 class="mb-0">No Registrations currently going on</h5>
+            </div>
+          </div>
+          <hr>
+          {% else %}
+          <div class="row">
+            <div class="col-sm-8">
+              <h4 class="mb-0">Live Registrations</h4>
+            </div>
+          </div>
+          <hr>
+          {% for registration in present_registrations.all %}
+            <div class="row">
+              <div class="col-sm-4">
+                <h6 class="mb-0">{{ registration.name }}</h6>
+              </div>
+              <div class="col-sm-4 text-secondary">
+                Will end on {{ registration.endTime }}
+              </div>
+              <div class="col-sm-3 text-secondary">
+                <a href="{% url 'live_registration' registration.id %}"><button class="btn btn-info" name="button">Register Courses</button></a>
+              </div>
+            </div>
+            <hr>
+          {% endfor %}
+        {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="row gutters-sm">
     <div class="col-md-12">
       <div class="card mb-3">
@@ -42,34 +81,35 @@
     </div>
   </div>
 
+
   <div class="row gutters-sm">
     <div class="col-md-12">
       <div class="card mb-3">
         <div class="card-body">
-          {% if not present_registrations %}
+          {% if not past_registrations %}
           <div class="row">
             <div class="col-sm-8">
-              <h5 class="mb-0">No Registrations currently going on</h5>
+              <h5 class="mb-0">No Registrations happened in the past</h5>
             </div>
           </div>
           <hr>
           {% else %}
           <div class="row">
             <div class="col-sm-8">
-              <h4 class="mb-0">Live Registrations</h4>
+              <h4 class="mb-0">Past Registrations</h4>
             </div>
           </div>
           <hr>
-          {% for registration in present_registrations.all %}
+          {% for registration in past_registrations.all %}
             <div class="row">
               <div class="col-sm-4">
                 <h6 class="mb-0">{{ registration.name }}</h6>
               </div>
               <div class="col-sm-4 text-secondary">
-                Will end on {{ registration.endTime }}
+                Started on {{ registration.startTime }}
               </div>
-              <div class="col-sm-3 text-secondary">
-                <a href="{% url 'live_registration' registration.id %}"><button class="btn btn-info" name="button">Register Courses</button></a>
+              <div class="col-sm-4 text-secondary">
+                Ended on {{ registration.endTime }}
               </div>
             </div>
             <hr>

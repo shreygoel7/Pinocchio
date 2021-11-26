@@ -7,5 +7,5 @@ urlpatterns = [
     path('createDepartment/', views.CreateDepartmentView.as_view(), name='create_department'),
     path('createRegistration/', views.CreateRegistrationView.as_view(), name='create_registration'),
     path('registration/', views.RegistrationsView.as_view(), name='registration'),
-    path('<int:registration_id>', views.LiveRegistrationView.as_view(), name='live_registration'),
+    path('live_registration/<int:registration_id>', views.LiveRegistrationView.as_view(), name='live_registration'),
 ]

@@ -129,8 +129,10 @@ class RegistrationsView(View):
         time = timezone.now()
         future_registrations = Registration.objects.filter(startTime__gt=time).order_by('startTime')
         present_registrations = Registration.objects.filter(endTime__gt=time).exclude(startTime__gt=time).order_by('endTime')
+        past_registrations = Registration.objects.filter(endTime__lt=time)
         return render(request, self.template_name, {'future_registrations': future_registrations,
-                                                    'present_registrations': present_registrations})
+                                                    'present_registrations': present_registrations,
+                                                    'past_registrations': past_registrations})
 
 class LiveRegistrationView(LoginRequiredMixin, View):
     template_name = 'academicInfo/live_registration.html'
@@ -138,10 +140,15 @@ class LiveRegistrationView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         if hasattr(request.user, 'student'):
             registration = get_object_or_404(Registration, pk=self.kwargs['registration_id'])
-            student = request.user.student
-            course_registration = registration.courseregistration_set.filter(semester__gt=getStudentSemester(student)).exclude(semester__gt=getStudentSemester(student)+1)
-            return render(request, self.template_name, {'course_registration' : course_registration,
-                                                        'student_courses' : student.courseregistration_set.all()})
+            time = timezone.now()
+            if registration.startTime < time and registration.endTime > time:
+                student = request.user.student
+                course_registration = registration.courseregistration_set.filter(semester__gt=getStudentSemester(student)).exclude(semester__gt=getStudentSemester(student)+1)
+                return render(request, self.template_name, {'course_registration' : course_registration,
+                                                            'student_courses' : student.courseregistration_set.all()})
+
+            else:
+                return redirect('registration')
 
         else:
             return redirect('home')
