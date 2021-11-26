@@ -1,5 +1,8 @@
-from academicInfo.models import Course, Registration, CourseRegistration, Department
+from academicInfo.models import (Course, Registration, CourseRegistration,
+                                 Department)
+
 from faculty.models import Faculty
+
 from student.models import Student
 
 from django.contrib.auth.models import User
@@ -28,10 +31,15 @@ class RegistrationTest(TestCase):
         startTime = timezone.now()
         timedelta = datetime.timedelta(days=1)
         endTime = startTime+timedelta
-        self.registration = Registration.objects.create(name='Test Registration', startTime=startTime, duration=timedelta, endTime=endTime)
+        self.registration = Registration.objects.create(name='Test Registration',
+                                                        startTime=startTime,
+                                                        duration=timedelta,
+                                                        endTime=endTime)
 
     def test_registration_name(self):
-        expected_name = self.registration.name + ' on ' + (self.registration.startTime + datetime.timedelta(hours=5, minutes=30)).strftime("%d %b, %Y  %I:%M:%S %p")
+        expected_name = self.registration.name + ' on ' + (self.registration.startTime +
+                                                           datetime.timedelta(hours=5, minutes=30)
+                                                           ).strftime("%d %b, %Y  %I:%M:%S %p")
         self.assertEqual(str(self.registration), expected_name)
 
 class CourseRegistrationTest(TestCase):
@@ -42,13 +50,19 @@ class CourseRegistrationTest(TestCase):
         startTime = timezone.now()
         timedelta = datetime.timedelta(days=1)
         endTime = startTime+timedelta
-        registration = Registration.objects.create(name='Test Registration', startTime=startTime, duration=timedelta, endTime=endTime)
-        course = Course.objects.create(name='Test Course', code='TestCode', credits=4)
+        registration = Registration.objects.create(name='Test Registration',
+                                                   startTime=startTime,
+                                                   duration=timedelta,
+                                                   endTime=endTime)
+        course = Course.objects.create(name='Test Course', code='TestCode',
+                                       credits=4)
         department = Department.objects.create(name='test department')
         user = User.objects.create(username='testuser')
-        faculty = Faculty.objects.create(user=user, dob=startTime, department=department)
+        faculty = Faculty.objects.create(user=user, dob=startTime,
+                                         department=department)
         user2 = User.objects.create(username='testStudent')
-        student = Student.objects.create(user=user2, dob=startTime, batch=2018, department=department)
+        student = Student.objects.create(user=user2, dob=startTime, batch=2018,
+                                         department=department)
         self.course_registration = CourseRegistration.objects.create(registration=registration,
                                                                      course=course,
                                                                      faculty=faculty,
@@ -58,8 +72,10 @@ class CourseRegistrationTest(TestCase):
         self.course_registration.students.add(student)
 
     def test_remaining_seats(self):
-        expected_remaining_seats = self.course_registration.capacity - self.course_registration.students.count()
-        self.assertEqual(self.course_registration.remaining_seats, expected_remaining_seats)
+        expected_remaining_seats = (self.course_registration.capacity -
+                                    self.course_registration.students.count())
+        self.assertEqual(self.course_registration.remaining_seats,
+                         expected_remaining_seats)
 
 class DepartmentTest(TestCase):
 

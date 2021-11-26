@@ -1,5 +1,4 @@
 from staff.models import Staff
-from academicInfo.forms import CreateCourseForm
 
 from django.contrib.auth.models import User
 from django.shortcuts import reverse
@@ -34,17 +33,15 @@ class CreateCourseViewTest(TestCase):
 
     def test_create_course_without_login(self):
         response = self.client.get(reverse('create_course'))
-        self.assertRedirects(response, '/account/login/?next=/academicInfo/createCourse/')
+        self.assertRedirects(response,
+                             '/account/login/?next=/academicInfo/createCourse/')
 
     def test_create_course_without_admin(self):
         c = Client()
         login = c.login(username='test2', password='complex2password')
         response = c.get(reverse('create_course'))
 
-        # Check that we got a response "success"
         self.assertEqual(response.status_code, 302)
-
-        # Check we used correct template
         self.assertRedirects(response, '/')
 
     def test_create_course_with_admin(self):
@@ -62,17 +59,28 @@ class CreateCourseViewTest(TestCase):
         c = Client()
         login = c.login(username='test', password='complex1password')
 
-        response = c.post(reverse('create_course'), {'name' : 'Course', 'code': 'Code', 'credits': 10})
+        response = c.post(reverse('create_course'),
+                          {'name' : 'Course',
+                           'code': 'Code',
+                           'credits': 10
+                           }
+                          )
 
         self.assertTemplateUsed(response, 'academicInfo/create_course.html')
         self.assertEqual(response.status_code, 200)
-        self.assertFormError(response, 'create_course_form', 'credits', 'Ensure this value is less than or equal to 8.')
+        self.assertFormError(response, 'create_course_form', 'credits',
+                             'Ensure this value is less than or equal to 8.')
 
     def test_post_request_with_valid_form(self):
         c = Client()
         login = c.login(username='test', password='complex1password')
 
-        response = c.post(reverse('create_course'), {'name' : 'Course', 'code': 'Code', 'credits': 4})
+        response = c.post(reverse('create_course'),
+                          {'name' : 'Course',
+                           'code': 'Code',
+                           'credits': 4
+                           }
+                          )
 
         self.assertTemplateUsed(response, 'academicInfo/create_course.html')
         self.assertEqual(response.status_code, 200)

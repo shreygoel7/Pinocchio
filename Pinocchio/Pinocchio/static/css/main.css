@@ -91,18 +91,12 @@
   width: 35em;
 }
 
-/* .crop {
-    display: inline-block;
-    height: 20em;
-    position: relative;
-    overflow: hidden;
-} */
-
 #image{
   float: right;
   overflow: hidden;
   width: 35em;
   height: relative;
-  padding-top: 5em;
+  margin-top: 5em;
+  margin-right: 5em;
   border-radius: 10px;
 }

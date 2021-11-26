@@ -1,6 +1,10 @@
-from django.urls import path, include
+from django.urls import path
+
 from . import views
 
+"""
+URL patterns for the academicInfo application.
+"""
 urlpatterns = [
     path('createCourse/', views.CreateCourseView.as_view(), name='create_course'),
     path('createCourseRegistration/', views.CreateCourseRegistrationView.as_view(), name='create_course_registration'),

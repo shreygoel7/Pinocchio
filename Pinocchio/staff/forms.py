@@ -5,12 +5,18 @@ from django.contrib.auth.forms import UserCreationForm
 
 
 class StaffSignupForm(UserCreationForm):
+    """
+    Form for Staff to signup for account.
+    """
+
     dob = forms.DateField(label='Date of Birth', required=True)
 
     class Meta:
         model = User
-        fields = ('first_name', 'last_name', 'email', 'username', 'password1', 'password2')
+        fields = ('first_name', 'last_name', 'email', 'username', 'password1',
+                  'password2')
 
+    # Check if a user with this email already exists.
     def clean_email(self):
         email = self.cleaned_data['email']
         if User.objects.filter(email=email).exists():

@@ -1,5 +1,5 @@
-from academicInfo.models import Course, Department, Registration, CourseRegistration
-from academicInfo.forms import CreateRegistrationForm
+from academicInfo.models import (Course, Department, Registration,
+                                 CourseRegistration)
 
 from staff.models import Staff
 
@@ -42,7 +42,8 @@ class CreateCourseRegistrationViewTest(TestCase):
 
     def test_create_registration_without_login(self):
         response = self.client.get(reverse('create_registration'))
-        self.assertRedirects(response, '/account/login/?next=/academicInfo/createRegistration/')
+        self.assertRedirects(response,
+                             '/account/login/?next=/academicInfo/createRegistration/')
 
     def test_create_registration_without_admin(self):
         c = Client()
@@ -64,7 +65,8 @@ class CreateCourseRegistrationViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
         # Check we used correct template
-        self.assertTemplateUsed(response, 'academicInfo/create_registration.html')
+        self.assertTemplateUsed(response,
+                                'academicInfo/create_registration.html')
 
     def test_post_request_with_invalid_form(self):
         c = Client()
@@ -72,20 +74,24 @@ class CreateCourseRegistrationViewTest(TestCase):
 
         response = c.post(reverse('create_registration'), {})
 
-        self.assertTemplateUsed(response, 'academicInfo/create_registration.html')
+        self.assertTemplateUsed(response,
+                                'academicInfo/create_registration.html')
         self.assertEqual(response.status_code, 200)
-        self.assertFormError(response, 'create_registration_form', 'name', 'This field is required.')
+        self.assertFormError(response, 'create_registration_form', 'name',
+                             'This field is required.')
 
     def test_post_request_with_valid_form(self):
         c = Client()
         login = c.login(username='test', password='complex1password')
 
-        response = c.post(reverse('create_registration'), {'name' : 'Test',
-                                                           'startTime': timezone.now()+datetime.timedelta(days=1),
-                                                           'days': 2,
-                                                           'hours': 0,
-                                                           'minutes': 0
-                                                           })
+        response = c.post(reverse('create_registration'),
+                          {'name' : 'Test',
+                           'startTime': timezone.now()+datetime.timedelta(days=1),
+                           'days': 2,
+                           'hours': 0,
+                           'minutes': 0
+                           }
+                          )
         self.assertTemplateUsed(response, 'academicInfo/create_registration.html')
         self.assertEqual(response.status_code, 200)
 
@@ -93,12 +99,15 @@ class CreateCourseRegistrationViewTest(TestCase):
         c = Client()
         login = c.login(username='test', password='complex1password')
 
-        response = c.post(reverse('create_registration'), {'name' : 'Test',
-                                                           'startTime': timezone.now()+datetime.timedelta(days=1),
-                                                           'days': 0,
-                                                           'hours': 0,
-                                                           'minutes': 0
-                                                           })
+        response = c.post(reverse('create_registration'),
+                          {
+                           'name' : 'Test',
+                           'startTime': timezone.now()+datetime.timedelta(days=1),
+                           'days': 0,
+                           'hours': 0,
+                           'minutes': 0
+                           }
+                          )
         self.assertTemplateUsed(response, 'academicInfo/create_registration.html')
         self.assertEqual(response.status_code, 200)
 
@@ -156,15 +165,27 @@ class LiveRegistrationViewTest(TestCase):
         startTime = timezone.now()
         timedelta = datetime.timedelta(days=1)
         endTime = startTime+timedelta
-        self.registration = Registration.objects.create(name='Test Registration', startTime=startTime, duration=timedelta, endTime=endTime)
-        self.course = Course.objects.create(name='Test Course', code='TestCode', credits=4)
-        self.faculty = Faculty.objects.create(user=user2, dob=startTime, department=department)
+        self.registration = Registration.objects.create(name='Test Registration',
+                                                        startTime=startTime,
+                                                        duration=timedelta,
+                                                        endTime=endTime
+                                                        )
+        self.course = Course.objects.create(name='Test Course', code='TestCode',
+                                            credits=4)
+        self.faculty = Faculty.objects.create(user=user2, dob=startTime,
+                                              department=department
+                                              )
 
     def test_live_registration_view_without_student(self):
         c = Client()
         login = c.login(username='test2', password='complex2password')
 
-        response = c.get(reverse('live_registration', kwargs={'registration_id':self.registration.id}))
+        response = c.get(reverse('live_registration',
+                                 kwargs={
+                                         'registration_id': self.registration.id
+                                         }
+                                 )
+                         )
 
         self.assertRedirects(response, '/')
         self.assertEqual(response.status_code, 302)
@@ -173,7 +194,12 @@ class LiveRegistrationViewTest(TestCase):
         c = Client()
         login = c.login(username='test', password='complex1password')
 
-        response = c.get(reverse('live_registration', kwargs={'registration_id':self.registration.id}))
+        response = c.get(reverse('live_registration',
+                                 kwargs={
+                                         'registration_id': self.registration.id
+                                         }
+                                 )
+                         )
 
         self.assertTemplateUsed(response, 'academicInfo/live_registration.html')
         self.assertEqual(response.status_code, 200)
@@ -188,8 +214,16 @@ class LiveRegistrationViewTest(TestCase):
                                                                 semester=8
                                                                 )
 
-        response = c.post(reverse('live_registration', kwargs={'registration_id':self.registration.id}), {'Register': True,
-                                                                                                          'course_registration_id': course_registration.id})
+        response = c.post(reverse('live_registration',
+                                  kwargs={
+                                          'registration_id': self.registration.id
+                                          }
+                                  ),
+                          {
+                           'Register': True,
+                           'course_registration_id': course_registration.id
+                           }
+                          )
 
         self.assertEqual(response.status_code, 302)
 
@@ -203,8 +237,16 @@ class LiveRegistrationViewTest(TestCase):
                                                                 semester=3
                                                                 )
 
-        response = c.post(reverse('live_registration', kwargs={'registration_id':self.registration.id}), {'Register': True,
-                                                                                                          'course_registration_id': course_registration.id})
+        response = c.post(reverse('live_registration',
+                                  kwargs={
+                                          'registration_id': self.registration.id
+                                          }
+                                  ),
+                          {
+                           'Register': True,
+                           'course_registration_id': course_registration.id
+                           }
+                          )
 
         self.assertRedirects(response, '/')
         self.assertEqual(response.status_code, 302)
@@ -220,8 +262,16 @@ class LiveRegistrationViewTest(TestCase):
                                                                 )
         course_registration.students.add(self.student)
 
-        response = c.post(reverse('live_registration', kwargs={'registration_id':self.registration.id}), {'UnRegister': True,
-                                                                                                          'course_registration_id': course_registration.id})
+        response = c.post(reverse('live_registration',
+                                  kwargs={
+                                          'registration_id': self.registration.id
+                                          }
+                                  ),
+                          {
+                           'UnRegister': True,
+                           'course_registration_id': course_registration.id
+                           }
+                          )
 
         self.assertEqual(response.status_code, 302)
 
@@ -229,7 +279,12 @@ class LiveRegistrationViewTest(TestCase):
         c = Client()
         login = c.login(username='test2', password='complex2password')
 
-        response = c.post(reverse('live_registration', kwargs={'registration_id':self.registration.id}))
+        response = c.post(reverse('live_registration',
+                                  kwargs={
+                                          'registration_id': self.registration.id
+                                          }
+                                  )
+                          )
 
         self.assertRedirects(response, '/')
         self.assertEqual(response.status_code, 302)

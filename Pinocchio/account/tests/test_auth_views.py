@@ -7,7 +7,6 @@ from django.shortcuts import reverse
 from django.test import Client, TestCase
 from django.utils import timezone
 
-import datetime
 
 class AuthTest(TestCase):
 
@@ -41,7 +40,8 @@ class AuthTest(TestCase):
 
         self.assertTemplateUsed(response, 'account/login.html')
         self.assertEqual(response.status_code, 200)
-        self.assertFormError(response, 'login_form', 'password', 'This field is required.')
+        self.assertFormError(response, 'login_form', 'password',
+                             'This field is required.')
 
     def test_new_login_view(self):
         c = Client()

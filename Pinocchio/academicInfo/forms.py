@@ -2,9 +2,15 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 
-from .models import Course, CourseRegistration, Department, Registration
+from .models import (Course,
+                     CourseRegistration,
+                     Department,
+                     Registration)
 
 class CreateCourseForm(forms.ModelForm):
+    """
+    Form for creating new Course by the college admin.
+    """
 
     class Meta:
         model = Course
@@ -17,6 +23,9 @@ class CreateCourseForm(forms.ModelForm):
         self.fields['credits'].label = 'Course Credits'
 
 class CreateCourseRegistrationForm(forms.ModelForm):
+    """
+    Form for adding Course to the resgitration by the admin.
+    """
 
     class Meta:
         model = CourseRegistration
@@ -34,6 +43,9 @@ class CreateCourseRegistrationForm(forms.ModelForm):
         self.fields['registration'].queryset = Registration.objects.filter(startTime__gt=timezone.now())
 
 class CreateDepartmentForm(forms.ModelForm):
+    """
+    Form for creating new Department by the admin.
+    """
 
     class Meta:
         model = Department
@@ -44,6 +56,9 @@ class CreateDepartmentForm(forms.ModelForm):
         self.fields['name'].label = 'Department Name'
 
 class CreateRegistrationForm(forms.ModelForm):
+    """
+    Form for creating new Registration for the students by the admin.
+    """
 
     class Meta:
         model = Registration
