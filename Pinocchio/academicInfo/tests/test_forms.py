@@ -1,4 +1,6 @@
-from academicInfo.forms import (CreateCourseForm, CreateRegistrationForm,
+from academicInfo.forms import (CreateCourseForm,
+                                CreateDepartmentForm,
+                                CreateRegistrationForm,
                                 CreateCourseRegistrationForm)
 
 from django.test import TestCase
@@ -76,4 +78,12 @@ class RegistrationFormTest(TestCase):
         self.assertTrue(
             form.fields['name'].label == 'Registration Name' and
             form.fields['startTime'].label == 'Registration Start Time'
+        )
+
+class DepartmentFormTest(TestCase):
+
+    def test_department_form_label(self):
+        form = CreateDepartmentForm()
+        self.assertTrue(
+            form.fields['name'].label == 'Department Name'
         )

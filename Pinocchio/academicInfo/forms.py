@@ -2,7 +2,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 
-from .models import Course, CourseRegistration, Registration
+from .models import Course, CourseRegistration, Department, Registration
 
 class CreateCourseForm(forms.ModelForm):
 
@@ -32,6 +32,16 @@ class CreateCourseRegistrationForm(forms.ModelForm):
 
         # Allow create course registration only for future registrations
         self.fields['registration'].queryset = Registration.objects.filter(startTime__gt=timezone.now())
+
+class CreateDepartmentForm(forms.ModelForm):
+
+    class Meta:
+        model = Department
+        fields = ('__all__')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['name'].label = 'Department Name'
 
 class CreateRegistrationForm(forms.ModelForm):
 

@@ -7,7 +7,11 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import F
 from django.views.generic import View
 
-from .forms import CreateCourseForm, CreateCourseRegistrationForm, CreateRegistrationForm
+from .forms import (CreateCourseForm,
+                    CreateCourseRegistrationForm,
+                    CreateDepartmentForm,
+                    CreateRegistrationForm)
+
 from .models import Course, CourseRegistration, Registration
 
 import datetime
@@ -29,7 +33,9 @@ class CreateCourseView(LoginRequiredMixin, View):
         if create_course_form.is_valid():
             course = create_course_form.save()
             course.save()
-            return redirect('home')
+            return render(request, self.template_name, {'create_course_form' : create_course_form,
+                                                        'success': 'Successfully created a new Course.'})
+
         return render(request, self.template_name, {'create_course_form' : create_course_form})
 
 class CreateCourseRegistrationView(LoginRequiredMixin, View):
@@ -51,11 +57,36 @@ class CreateCourseRegistrationView(LoginRequiredMixin, View):
                                                                                                          semester=course_registration.semester)
             if len(similar_course_registration) == 0:
                 course_registration.save()
-                return redirect('home')
+                return render(request, self.template_name, {'create_course_registration_form' : create_course_registration_form,
+                                                            'success': 'Successfully added course to the registration.'})
             else:
                 create_course_registration_form.add_error('course', 'This course is already added in this semester.')
                 create_course_registration_form.add_error('semester', 'This semester already has this course.')
         return render(request, self.template_name, {'create_course_registration_form' : create_course_registration_form})
+
+class CreateDepartmentView(LoginRequiredMixin, View):
+    template_name = 'academicInfo/create_department.html'
+    create_department_form = CreateDepartmentForm
+
+    def get(self, request, *args, **kwargs):
+        if hasattr(request.user, 'staff') and request.user.staff.is_admin:
+            create_department_form = self.create_department_form()
+            return render(request, self.template_name, {'create_department_form' : create_department_form})
+
+        else:
+            return redirect('home')
+
+    def post(self, request, *args, **kwargs):
+        create_department_form = CreateDepartmentForm(request.POST)
+
+        if create_department_form.is_valid():
+            department = create_department_form.save()
+            department.save()
+            return render(request, self.template_name, {'create_department_form' : create_department_form,
+                                                        'success': 'Successfully added a new Department.'})
+
+        else:
+            return render(request, self.template_name, {'create_department_form' : create_department_form})
 
 class CreateRegistrationView(LoginRequiredMixin, View):
     template_name = 'academicInfo/create_registration.html'
@@ -77,6 +108,7 @@ class CreateRegistrationView(LoginRequiredMixin, View):
             if days + hours + minutes == 0:
                 return render(request, self.template_name, {'create_registration_form' : create_registration_form,
                                                             'error' : 'Duration cannot be 0.'}) # duration cannot be 0
+
             startTime = create_registration_form.cleaned_data['startTime']
             duration = datetime.timedelta(days=days, hours=hours, minutes=minutes)
             endTime = startTime + duration
@@ -85,7 +117,9 @@ class CreateRegistrationView(LoginRequiredMixin, View):
                                                        duration=duration,
                                                        endTime=endTime)
             registration.save()
-            return redirect('registration')
+            return render(request, self.template_name, {'create_registration_form' : create_registration_form,
+                                                        'success': 'Successfully created new registration.'})
+
         return render(request, self.template_name, {'create_registration_form' : create_registration_form})
 
 class RegistrationsView(View):
@@ -121,7 +155,7 @@ class LiveRegistrationView(LoginRequiredMixin, View):
             semester = getStudentSemester(student)
             if 'Register' in request.POST:
                 if currTime > registration.startTime and currTime < registration.endTime and course_registration.semester in range(semester, semester+2):
-                    if not student in course_registration.students.all():
+                    if not student in course_registration.students.all() and course_registration.remaining_seats > 0:
                         course_registration.students.add(student)
                     return redirect(reverse('live_registration', kwargs={'registration_id' : registration.id}))
                 else:

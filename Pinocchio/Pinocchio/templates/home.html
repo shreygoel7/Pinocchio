@@ -2,6 +2,14 @@
 {% load static %}
 
 {% block content %}
+
+{% if success %}
+  <div class="alert alert-success alert-dismissible">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong>Cool!</strong> {{ success }}
+  </div>
+{% endif %}
+
 <div class="newdiv">
     <div class="text">
       <h2>About Pinocchio</h2>

@@ -70,8 +70,8 @@ class FacultySignUpTest(TestCase):
                                                       'password2': 'complex1password',
                                                       'department': department.id})
 
-        self.assertRedirects(response, '/')
-        self.assertEqual(response.status_code, 302)
+        self.assertTemplateUsed(response, 'home.html')
+        self.assertEqual(response.status_code, 200)
 
     def test_post_faculty_invalid(self):
         c = Client()
@@ -148,8 +148,8 @@ class StaffSignUpTest(TestCase):
                                                     'password1': 'complex1password',
                                                     'password2': 'complex1password'})
 
-        self.assertRedirects(response, '/')
-        self.assertEqual(response.status_code, 302)
+        self.assertTemplateUsed(response, 'home.html')
+        self.assertEqual(response.status_code, 200)
 
     def test_post_staff_invalid(self):
         c = Client()
@@ -227,8 +227,8 @@ class StudentSignUpTest(TestCase):
                                                       'batch': 2018,
                                                       'department': department.id})
 
-        self.assertRedirects(response, '/')
-        self.assertEqual(response.status_code, 302)
+        self.assertTemplateUsed(response, 'home.html')
+        self.assertEqual(response.status_code, 200)
 
     def test_post_student_invalid(self):
         c = Client()

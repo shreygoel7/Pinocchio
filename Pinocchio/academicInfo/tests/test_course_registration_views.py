@@ -98,5 +98,5 @@ class CreateCourseRegistrationViewTest(TestCase):
                                                                   'capacity': 30,
                                                                   'semester': 5
                                                                   })
-        self.assertRedirects(response, '/')
-        self.assertEqual(response.status_code, 302)
+        self.assertTemplateUsed(response, 'academicInfo/create_course_registration.html')
+        self.assertEqual(response.status_code, 200)

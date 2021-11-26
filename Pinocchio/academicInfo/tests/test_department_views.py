@@ -1,12 +1,12 @@
 from staff.models import Staff
-from academicInfo.forms import CreateCourseForm
+from academicInfo.forms import CreateDepartmentForm
 
 from django.contrib.auth.models import User
 from django.shortcuts import reverse
 from django.test import Client, TestCase
 from django.utils import timezone
 
-class CreateCourseViewTest(TestCase):
+class CreateDepartmentViewTest(TestCase):
 
     @classmethod
     def setUpTestData(self):
@@ -32,14 +32,14 @@ class CreateCourseViewTest(TestCase):
             is_admin=False,
         )
 
-    def test_create_course_without_login(self):
-        response = self.client.get(reverse('create_course'))
-        self.assertRedirects(response, '/account/login/?next=/academicInfo/createCourse/')
+    def test_create_department_without_login(self):
+        response = self.client.get(reverse('create_department'))
+        self.assertRedirects(response, '/account/login/?next=/academicInfo/createDepartment/')
 
-    def test_create_course_without_admin(self):
+    def test_create_department_without_admin(self):
         c = Client()
         login = c.login(username='test2', password='complex2password')
-        response = c.get(reverse('create_course'))
+        response = c.get(reverse('create_department'))
 
         # Check that we got a response "success"
         self.assertEqual(response.status_code, 302)
@@ -47,32 +47,32 @@ class CreateCourseViewTest(TestCase):
         # Check we used correct template
         self.assertRedirects(response, '/')
 
-    def test_create_course_with_admin(self):
+    def test_create_department_with_admin(self):
         c = Client()
         login = c.login(username='test', password='complex1password')
-        response = c.get(reverse('create_course'))
+        response = c.get(reverse('create_department'))
 
         # Check that we got a response "success"
         self.assertEqual(response.status_code, 200)
 
         # Check we used correct template
-        self.assertTemplateUsed(response, 'academicInfo/create_course.html')
+        self.assertTemplateUsed(response, 'academicInfo/create_department.html')
 
     def test_post_request_with_invalid_form(self):
         c = Client()
         login = c.login(username='test', password='complex1password')
 
-        response = c.post(reverse('create_course'), {'name' : 'Course', 'code': 'Code', 'credits': 10})
+        response = c.post(reverse('create_department'), {})
 
-        self.assertTemplateUsed(response, 'academicInfo/create_course.html')
+        self.assertTemplateUsed(response, 'academicInfo/create_department.html')
         self.assertEqual(response.status_code, 200)
-        self.assertFormError(response, 'create_course_form', 'credits', 'Ensure this value is less than or equal to 8.')
+        self.assertFormError(response, 'create_department_form', 'name', 'This field is required.')
 
     def test_post_request_with_valid_form(self):
         c = Client()
         login = c.login(username='test', password='complex1password')
 
-        response = c.post(reverse('create_course'), {'name' : 'Course', 'code': 'Code', 'credits': 4})
+        response = c.post(reverse('create_department'), {'name' : 'Department'})
 
-        self.assertTemplateUsed(response, 'academicInfo/create_course.html')
+        self.assertTemplateUsed(response, 'academicInfo/create_department.html')
         self.assertEqual(response.status_code, 200)

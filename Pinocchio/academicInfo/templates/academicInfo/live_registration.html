@@ -39,22 +39,22 @@
                 <div class="col-sm-2 text-secondary">
                   <p>Remaining Seats: {{ course_registration.remaining_seats }}</p>
                 </div>
-                {% if not course_registration in student_courses %}
-                <div class="col-sm-1">
-                  <form method="POST">
-                    {% csrf_token %}
-                    <input type="hidden" name="course_registration_id" value="{{ course_registration.id }}">
-                    <input type="submit" class="btn btn-info" name="Register" value="Register">
-                  </form>
-                </div>
-                {% else %}
+                  {% if not course_registration in student_courses and course_registration.remaining_seats > 0 %}
                   <div class="col-sm-1">
                     <form method="POST">
                       {% csrf_token %}
                       <input type="hidden" name="course_registration_id" value="{{ course_registration.id }}">
-                      <input type="submit" class="btn btn-danger" name="UnRegister" value="UnRegister">
+                      <input type="submit" class="btn btn-info" name="Register" value="Register">
                     </form>
                   </div>
+                  {% elif course_registration in student_courses %}
+                    <div class="col-sm-1">
+                      <form method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="course_registration_id" value="{{ course_registration.id }}">
+                        <input type="submit" class="btn btn-danger" name="UnRegister" value="UnRegister">
+                      </form>
+                    </div>
                 {% endif %}
               </div>
               <hr>

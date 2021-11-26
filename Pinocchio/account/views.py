@@ -6,6 +6,7 @@ from staff.models import Staff
 
 from student.forms import StudentSignupForm
 from student.models import Student
+from student.utils import getStudentSemester
 
 from django.shortcuts import render, redirect
 from django.contrib import auth
@@ -37,7 +38,7 @@ class FacultySignUp(View):
                               department=faculty_signup_form.cleaned_data['department'])
             faculty.save()
             auth.login(request, user)
-            return redirect('home')
+            return render(request, 'home.html', {'success' : 'Successfully created new account.'})
         return render(request, self.template_name, {'faculty_signup_form' : faculty_signup_form})
 
 class StaffSignUp(View):
@@ -59,7 +60,7 @@ class StaffSignUp(View):
             staff = Staff(user=user, dob=staff_signup_form.cleaned_data['dob'])
             staff.save()
             auth.login(request, user)
-            return redirect('home')
+            return render(request, 'home.html', {'success' : 'Successfully created new account.'})
         return render(request, self.template_name, {'staff_signup_form' : staff_signup_form})
 
 class StudentSignUp(View):
@@ -83,7 +84,7 @@ class StudentSignUp(View):
                               department=student_signup_form.cleaned_data['department'])
             student.save()
             auth.login(request, user)
-            return redirect('home')
+            return render(request, 'home.html', {'success' : 'Successfully created new account.'})
         return render(request, self.template_name, {'student_signup_form' : student_signup_form})
 
 class UserProfile(LoginRequiredMixin, View):
@@ -92,7 +93,9 @@ class UserProfile(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         if hasattr(request.user, 'student'):
             student = request.user.student
-            return render(request, self.template_name, {'user' : request.user, 'courses' : student.courseregistration_set.all() })
+            return render(request, self.template_name, {'user' : request.user,
+                                                        'courses' : student.courseregistration_set.all(),
+                                                        'semester':  getStudentSemester(student)})
 
         else:
             return redirect('home')
@@ -110,7 +113,7 @@ class LoginView(View):
 
     def post(self, request, *args, **kwargs):
         login_form = LoginForm(request.POST)
-        
+
         if login_form.is_valid():
             user = authenticate(username=login_form.cleaned_data['username'],
                                 password=login_form.cleaned_data['password'])
@@ -131,4 +134,4 @@ class LogoutView(LoginRequiredMixin, View):
 
     def post(self, request, *args, **kwargs):
         auth.logout(request)
-        return redirect('home')
+        return render(request, 'home.html', {'success' : 'Successfully logged out.'})
