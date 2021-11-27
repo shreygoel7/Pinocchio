@@ -17,7 +17,7 @@ Pinocchio is a website for students to register for their college courses. The p
 * Clone your repository using `git clone https://github.com/<your_user_name>/Pinocchio`
 * Enter the cloned directory using `cd Pinocchio/`
 
-### Setting up virtual environment(Optional)
+### Setting up virtual environment (Optional)
 
 You can do this using any method. Below is a method that I find very easy to use in **Windows**
 * Create a virtual environment  
@@ -42,3 +42,4 @@ You can do this using any method. Below is a method that I find very easy to use
 * Change directory to **Pinocchio** `cd Pinocchio`
 * Run the server `python manage.py test`
 * For checking coverage run `coverage run python manage.py test` and then run `coverage report`
+* For testing purpose, please see the `credentials.txt` file for some sample credentials.
