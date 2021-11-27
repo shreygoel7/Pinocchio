@@ -67,6 +67,13 @@ class CreateCourseRegistrationView(LoginRequiredMixin, View):
             # Add course to registration only if this course is not added already
             # in this registration.
             course_registration = create_course_registration_form.save(commit=False)
+
+            # Check if the registration has already started.
+            if course_registration.registration.startTime <= timezone.now():
+                create_course_registration_form.add_error('registration',
+                                                          'The registration has already started, you cannot add course to it now.')
+                return render(request, self.template_name, {'create_course_registration_form' : create_course_registration_form})
+
             courses_in_registration = course_registration.registration.courseregistration_set.all()
             similar_course_registration = courses_in_registration.filter(course=course_registration.course,
                                                                          semester=course_registration.semester)
