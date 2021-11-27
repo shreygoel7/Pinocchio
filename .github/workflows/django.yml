@@ -31,4 +31,8 @@ jobs:
         python Pinocchio/manage.py migrate
     - name: Run Tests
       run: |
-        python Pinocchio/manage.py test .
+        python Pinocchio/manage.py test account
+        python Pinocchio/manage.py test academicInfo
+        python Pinocchio/manage.py test faculty
+        python Pinocchio/manage.py test staff
+        python Pinocchio/manage.py test student
