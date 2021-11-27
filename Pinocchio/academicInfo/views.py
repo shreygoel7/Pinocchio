@@ -37,8 +37,7 @@ class CreateCourseView(LoginRequiredMixin, View):
             course = create_course_form.save()
             course.save()
 
-            return render(request, self.template_name, {'create_course_form' : create_course_form,
-                                                        'success': 'Successfully created a new Course.'})
+            return redirect('view_course')
 
         return render(request, self.template_name, {'create_course_form' : create_course_form})
 

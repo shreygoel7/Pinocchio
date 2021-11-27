@@ -82,8 +82,8 @@ class CreateCourseViewTest(TestCase):
                            }
                           )
 
-        self.assertTemplateUsed(response, 'academicInfo/create_course.html')
-        self.assertEqual(response.status_code, 200)
+        self.assertRedirects(response, '/academicInfo/viewCourse/')
+        self.assertEqual(response.status_code, 302)
 
     def test_view_courses_with_admin(self):
         c = Client()
