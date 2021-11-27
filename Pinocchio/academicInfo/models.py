@@ -32,7 +32,7 @@ class Registration(models.Model):
      - Registration duration should be non-zero.
     """
 
-    name = models.CharField(max_length=100, blank=False)
+    name = models.CharField(max_length=100, unique=True, blank=False)
     startTime = models.DateTimeField(blank=False)
     duration = models.DurationField(blank=False)
     endTime = models.DateTimeField(blank=False)

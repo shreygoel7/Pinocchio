@@ -72,5 +72,22 @@ class CreateDepartmentViewTest(TestCase):
 
         response = c.post(reverse('create_department'), {'name' : 'Department'})
 
-        self.assertTemplateUsed(response, 'academicInfo/create_department.html')
+        self.assertRedirects(response, '/academicInfo/viewDepartment/')
+        self.assertEqual(response.status_code, 302)
+
+    def test_view_department_with_admin(self):
+        c = Client()
+        login = c.login(username='test', password='complex1password')
+
+        response = c.get(reverse('view_department'))
+
+        self.assertTemplateUsed(response, 'academicInfo/departments.html')
         self.assertEqual(response.status_code, 200)
+
+    def test_view_department_without_admin(self):
+        c = Client()
+        login = c.login(username='test2', password='complex2password')
+        response = c.get(reverse('view_department'))
+
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, '/')

@@ -7,7 +7,7 @@ from .forms import (CreateCourseForm,
                     CreateDepartmentForm,
                     CreateRegistrationForm)
 
-from .models import CourseRegistration, Registration
+from .models import Course, CourseRegistration, Department, Registration
 
 import datetime
 from django.utils import timezone
@@ -108,8 +108,7 @@ class CreateDepartmentView(LoginRequiredMixin, View):
         if create_department_form.is_valid():
             department = create_department_form.save()
             department.save()
-            return render(request, self.template_name, {'create_department_form' : create_department_form,
-                                                        'success': 'Successfully added a new Department.'})
+            return redirect('view_department')
         else:
             return render(request, self.template_name, {'create_department_form' : create_department_form})
 
@@ -156,8 +155,7 @@ class CreateRegistrationView(LoginRequiredMixin, View):
                                                        endTime=endTime)
 
             registration.save()
-            return render(request, self.template_name, {'create_registration_form' : create_registration_form,
-                                                        'success': 'Successfully created new registration.'})
+            return redirect('registration')
 
         return render(request, self.template_name, {'create_registration_form' : create_registration_form})
 
@@ -253,5 +251,38 @@ class LiveRegistrationView(LoginRequiredMixin, View):
                 return redirect(reverse('live_registration',
                                         kwargs={'registration_id' : registration.id}))
 
+        else:
+            return redirect('home')
+
+class DepartmentsView(LoginRequiredMixin, View):
+    """
+    View for admin to see departments and add new department.
+    """
+
+    template_name = 'academicInfo/departments.html'
+
+    def get(self, request, *args, **kwargs):
+
+        # Render this page only for the Admin.
+        if hasattr(request.user, 'staff') and request.user.staff.is_admin:
+            departments = Department.objects.all()
+            return render(request, self.template_name, {'departments' : departments})
+        else:
+            return redirect('home')
+
+
+class CourseView(LoginRequiredMixin, View):
+    """
+    View for admin to see Courses and add new Course.
+    """
+
+    template_name = 'academicInfo/courses.html'
+
+    def get(self, request, *args, **kwargs):
+
+        # Render this page only for the Admin.
+        if hasattr(request.user, 'staff') and request.user.staff.is_admin:
+            courses = Course.objects.all()
+            return render(request, self.template_name, {'courses' : courses})
         else:
             return redirect('home')

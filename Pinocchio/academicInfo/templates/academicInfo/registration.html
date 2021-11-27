@@ -7,6 +7,12 @@
       <strong>Error!</strong> {{ error }}
     </div>
   {% endif %}
+  {% if success %}
+    <div class="alert alert-success alert-dismissible">
+      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+      <strong>Cool!</strong> {{ success }}
+    </div>
+  {% endif %}
 
   <div class="row gutters-sm">
     <div class="col-md-12">

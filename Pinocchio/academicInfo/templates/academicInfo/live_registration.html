@@ -37,6 +37,9 @@
                   <p>Semester: {{ course_registration.semester }}</p>
                 </div>
                 <div class="col-sm-2 text-secondary">
+                  <p>Credits: {{ course_registration.course.credits }}</p>
+                </div>
+                <div class="col-sm-2 text-secondary">
                   <p>Remaining Seats: {{ course_registration.remaining_seats }}</p>
                 </div>
                   {% if not course_registration in student_courses and course_registration.remaining_seats > 0 %}

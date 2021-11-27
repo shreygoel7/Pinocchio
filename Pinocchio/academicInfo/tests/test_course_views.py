@@ -84,3 +84,20 @@ class CreateCourseViewTest(TestCase):
 
         self.assertTemplateUsed(response, 'academicInfo/create_course.html')
         self.assertEqual(response.status_code, 200)
+
+    def test_view_courses_with_admin(self):
+        c = Client()
+        login = c.login(username='test', password='complex1password')
+
+        response = c.get(reverse('view_course'))
+
+        self.assertTemplateUsed(response, 'academicInfo/courses.html')
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_course_without_admin(self):
+        c = Client()
+        login = c.login(username='test2', password='complex2password')
+        response = c.get(reverse('view_course'))
+
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, '/')

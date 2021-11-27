@@ -41,14 +41,17 @@
           <hr>
           {% for course in courses %}
             <div class="row">
-              <div class="col-sm-6">
+              <div class="col-sm-4">
                 <h6 class="mb-0">{{ course.course }}</h6>
               </div>
               <div class="col-sm-3 text-secondary">
                 Faculty: {{ course.faculty }}
               </div>
-              <div class="col-sm-3 text-secondary">
+              <div class="col-sm-2 text-secondary">
                 Semester: {{ course.semester }}
+              </div>
+              <div class="col-sm-2 text-secondary">
+                Credits: {{ course.course.credits }}
               </div>
             </div>
             <hr>

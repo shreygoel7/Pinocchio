@@ -92,8 +92,8 @@ class CreateCourseRegistrationViewTest(TestCase):
                            'minutes': 0
                            }
                           )
-        self.assertTemplateUsed(response, 'academicInfo/create_registration.html')
-        self.assertEqual(response.status_code, 200)
+        self.assertRedirects(response, '/academicInfo/registration/')
+        self.assertEqual(response.status_code, 302)
 
     def test_post_request_with_zero_duration(self):
         c = Client()
