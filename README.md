@@ -29,11 +29,11 @@ You can do this using any method. Below is a method that I find very easy to use
 
 ### Installing Dependencies
 
+* Change directory to **Pinocchio** `cd Pinocchio`
 * Install the requirements: `pip install -r requirements.txt`
 
 ### Running server
 
-* Change directory to **Pinocchio** `cd Pinocchio`
 * Run the server `python manage.py runserver`
 
 
