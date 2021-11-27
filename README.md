@@ -39,7 +39,6 @@ You can do this using any method. Below is a method that I find very easy to use
 
 ### Running tests
 
-* Change directory to **Pinocchio** `cd Pinocchio`
 * Run the server `python manage.py test`
 * For checking coverage run `coverage run python manage.py test` and then run `coverage report`
 * For testing purpose, please see the `credentials.txt` file for some sample credentials.
