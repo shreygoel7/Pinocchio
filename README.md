@@ -20,7 +20,7 @@ Pinocchio is a website for students to register for their college courses. The p
 ### Setting up virtual environment (Optional)
 
 You can do this using any method. Below is a method that I find very easy to use in **Windows**
-* Create a virtual environment  
+* Install `virtualenvwrapper-win`  
   * on **Windows CMD**: `pip install virtualenvwrapper-win`
 * Create new virtual env
   * on **Windows CMD**: `mkvirtualenv <your_env_name>` E.g. `mkvirtualenv pinocchio`
