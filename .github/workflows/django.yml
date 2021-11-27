@@ -25,6 +25,10 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r Pinocchio/requirements.txt
+    - name: Run migrations
+      run: |
+        python Pinocchio/manage.py makemigrations
+        python Pinocchio/manage.py migrate
     - name: Run Tests
       run: |
         python Pinocchio/manage.py test
