@@ -19,6 +19,8 @@ Pinocchio is a website for students to register for their college courses. The p
 
 ### Setting up virtual environment (Optional)
 
+**Windows:**
+
 You can do this using any method. Below is a method that I find very easy to use in **Windows**
 * Install `virtualenvwrapper-win`  
   * on **Windows CMD**: `pip install virtualenvwrapper-win`
@@ -26,6 +28,12 @@ You can do this using any method. Below is a method that I find very easy to use
   * on **Windows CMD**: `mkvirtualenv <your_env_name>` E.g. `mkvirtualenv pinocchio`
 
 **Info:** You can activate your virtual environment using `workon <your_env_name>` and deactivate it using `deactivate <your_env_name>`
+
+**Ubuntu:**
+
+Follow this method if you're using **Ubuntu**
+* Create virtual env using `python3 -m venv env`
+* Activate virtual env using `source env/bin/activate`
 
 ### Installing Dependencies
 
