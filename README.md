@@ -47,6 +47,6 @@ Follow this method if you're using **Ubuntu**
 
 ### Running tests
 
-* Run the server `python manage.py test`
+* To run all the tests please run `python manage.py test`
 * For checking coverage run `coverage run python manage.py test` and then run `coverage report`
-* For testing purpose, please see the `credentials.txt` file for some sample credentials.
+* For testing purpose, please see the `credentials.txt` file for some sample credentials. You can also create new users but the staff admin access (to create new courses, departments, semester registrations, etc.) is only given to single user `nitin` mentioned in the credentials file.
