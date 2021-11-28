@@ -187,5 +187,4 @@ class LogoutView(LoginRequiredMixin, View):
 
     def post(self, request, *args, **kwargs):
         auth.logout(request)
-        return render(request, 'home.html',
-                      {'success' : 'Successfully logged out.'})
+        return redirect('home')

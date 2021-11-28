@@ -64,5 +64,5 @@ class AuthTest(TestCase):
         login = c.login(username='test2', password='complex2password')
         response = c.post(reverse('logout'))
 
-        self.assertTemplateUsed(response, 'home.html')
-        self.assertEqual(response.status_code, 200)
+        self.assertRedirects(response, '/')
+        self.assertEqual(response.status_code, 302)
